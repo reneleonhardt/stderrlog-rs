@@ -44,7 +44,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-stderrlog = "0.4"
+stderrlog = "0.6"
 ```
 
 and this to your main():

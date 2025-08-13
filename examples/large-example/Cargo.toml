@@ -7,4 +7,4 @@ edition = "2018"
 [dependencies]
 clap = { version = "4", features = ["derive"] }
 log = "0.4.11"
-stderrlog = { path = "../../" }
+stderrlog = { workspace = true }
