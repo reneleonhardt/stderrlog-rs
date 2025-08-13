@@ -13,11 +13,9 @@ jobs:
       matrix:
         rust:
           - version: stable
-            command: test
-            args: ""
-          - version: 1.74.0
-            command: check
-            args: "--locked"
+            command: "cargo test"
+          - version: 1.74
+            command: "cargo generate-lockfile && cargo check --locked"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,12 +23,10 @@ jobs:
         run: |
           rustup toolchain install ${{ matrix.rust.version }} --profile minimal --allow-downgrade
           rustup default ${{ matrix.rust.version }}
-      - run: cp Cargo.lock.msrv Cargo.lock
-        if: ${{ matrix.rust.version}} == 1.74.0
       - name: cargo check/test
         run: |
           cargo --version
-          cargo ${{ matrix.rust.command }} ${{ matrix.rust.args }}
+          ${{ matrix.rust.command }}
 
   test:
     runs-on: ubuntu-latest
