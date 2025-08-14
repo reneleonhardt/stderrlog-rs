@@ -9,24 +9,23 @@ env:
   CARGO_TERM_COLOR: always
 jobs:
   msrv:
-    strategy:
-      matrix:
-        rust:
-          - version: stable
-            command: "cargo test"
-          - version: 1.74
-            command: "cargo generate-lockfile && cargo check --locked"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - name: install Rust
-        run: |
-          rustup toolchain install ${{ matrix.rust.version }} --profile minimal --allow-downgrade
-          rustup default ${{ matrix.rust.version }}
-      - name: cargo check/test
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: cargo msrv --verify
         run: |
           cargo --version
-          ${{ matrix.rust.command }}
+          cargo install cargo-msrv --locked
+          cargo msrv verify --manifest-path Cargo.toml
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: 1.74.1
+      - name: cargo check --locked
+        run: |
+          cargo --version
+          cargo generate-lockfile
+          cargo check --locked
 
   test:
     runs-on: ubuntu-latest
